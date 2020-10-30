@@ -1,12 +1,14 @@
 module Main
-  ( main
+  ( main,
   )
 where
 
-import           Test.Hspec                     ( hspec
-                                                , Spec
-                                                )
+import Test.Hspec
+  ( Spec,
+    hspec,
+  )
 import qualified Week01.CreditCardValidatorSpec
+import qualified Week01.TowersOfHanoiSpec
 import qualified Week02.LogAnalysisSpec
 import qualified Week03.GolfSpec
 import qualified Week04.SolnSpec
@@ -20,6 +22,7 @@ import qualified Week11.SExprSpec
 spec :: Spec
 spec = do
   Week01.CreditCardValidatorSpec.spec
+  Week01.TowersOfHanoiSpec.spec
   Week02.LogAnalysisSpec.spec
   Week03.GolfSpec.spec
   Week04.SolnSpec.spec

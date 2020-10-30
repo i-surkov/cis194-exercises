@@ -53,6 +53,7 @@ test-suite spec
     Spec.hs
   other-modules:
     Week01.CreditCardValidatorSpec
+    Week01.TowersOfHanoiSpec
     Week02.LogAnalysisSpec
     Week03.GolfSpec
     Week04.SolnSpec

@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:stacktrace-cis194"
+
+    - path: "test"
+      component: "stacktrace-cis194:test:spec"

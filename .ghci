@@ -4,3 +4,5 @@
 :set -isrc
 :set -itest
 :set prompt " > "
+
+:set -package hspec
