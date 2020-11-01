@@ -1,11 +1,11 @@
 -- CIS 194 Homework 2
 module Week02.Log
-  ( MessageType(..)
-  , TimeStamp
-  , LogMessage(..)
-  , MessageTree(..)
-  , testParse
-  , testWhatWentWrong
+  ( MessageType (..),
+    TimeStamp,
+    LogMessage (..),
+    MessageTree (..),
+    testParse,
+    testWhatWentWrong,
   )
 where
 
@@ -18,17 +18,19 @@ data MessageType
 type TimeStamp = Int
 
 data LogMessage
-  = LogMessage MessageType
-               TimeStamp
-               String
+  = LogMessage
+      MessageType
+      TimeStamp
+      String
   | Unknown String
   deriving (Show, Eq)
 
 data MessageTree
   = Leaf
-  | Node MessageTree
-         LogMessage
-         MessageTree
+  | Node
+      MessageTree
+      LogMessage
+      MessageTree
   deriving (Show, Eq)
 
 -- | @testParse p n f@ tests the log file parser @p@ by running it
@@ -39,10 +41,10 @@ testParse parse n file = take n . parse <$> readFile file
 -- | @testWhatWentWrong p w f@ tests the log file parser @p@ and
 --   warning message extractor @w@ by running them on the log file
 --   @f@.
-testWhatWentWrong
-  :: (String -> [LogMessage])
-  -> ([LogMessage] -> [String])
-  -> FilePath
-  -> IO [String]
+testWhatWentWrong ::
+  (String -> [LogMessage]) ->
+  ([LogMessage] -> [String]) ->
+  FilePath ->
+  IO [String]
 testWhatWentWrong parse whatWentWrong file =
   whatWentWrong . parse <$> readFile file
