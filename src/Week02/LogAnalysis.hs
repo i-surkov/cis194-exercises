@@ -20,10 +20,10 @@ import Week02.Log
 
 -- | Parse a log message into predefined format
 parseMessage :: String -> LogMessage
-parseMessage str = case (words str) of
+parseMessage str = case words str of
   ("I" : t : msg) -> LogMessage Info (read t) (unwords msg)
   ("W" : t : msg) -> LogMessage Warning (read t) (unwords msg)
-  ("E" : c : t : msg) -> LogMessage (Error (read c)) (read t) (unwords msg)
+  ("E" : c : t : msg) -> LogMessage (Error $ read c) (read t) (unwords msg)
   _ -> Unknown str
 
 -- | Parse log messages, devided by new lines

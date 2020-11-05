@@ -9,7 +9,7 @@ where
 
 -- | Converts Integer into array of digits
 toDigits :: Integer -> [Integer]
-toDigits x = reverse (toDigitsRev x)
+toDigits = reverse . toDigitsRev
 
 -- | Converts Integer into reversed array of digits
 toDigitsRev :: Integer -> [Integer]
@@ -30,4 +30,4 @@ sumDigits lst = sum [if x < 10 then x else x `mod` 10 + x `div` 10 | x <- lst]
 
 -- | Checks if Integer is a valid credit card number
 validate :: Integer -> Bool
-validate x = (sumDigits (doubleEveryOther (toDigits x))) `mod` 10 == 0
+validate x = (sumDigits . doubleEveryOther . toDigits $ x) `mod` 10 == 0
