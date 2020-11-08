@@ -45,10 +45,13 @@ data Tree a = Leaf | Node Integer (Tree a) a (Tree a) deriving (Show, Eq)
 
 -- | Produce balanced binary tree from a list
 foldTree :: [a] -> Tree a
-foldTree = foldr (\x tree -> fst $ insertTree x tree) Leaf
+-- Version with explicit lambda:
+-- foldTree = foldr (\x tree -> fst $ insertTree x tree) Leaf
+-- Version with chaining insertTree using curry-uncurry:
+foldTree = foldr (curry $ fst . uncurry insertTree) Leaf
 
 -- | Insert a value in a balanced tree, keeping it balanced, returning
--- updated tree and a `Bool` value indicating whether height of the tre
+-- updated tree and a `Bool` value indicating whether height of the tree
 -- increased
 insertTree :: a -> Tree a -> (Tree a, Bool)
 insertTree x Leaf = (Node 0 Leaf x Leaf, True)
