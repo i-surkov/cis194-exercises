@@ -31,9 +31,7 @@ fibs1 = map fib [0 ..]
 --------------------------- Exercise 2
 
 fibs2 :: [Integer]
-fibs2 = 0 : 1 : zipWith (+) fibs2 xs
-  where
-    (_ : xs) = fibs2
+fibs2 = 0 : 1 : zipWith (+) fibs2 (tail fibs2)
 
 --------------------------- Exercise 3
 
@@ -92,10 +90,10 @@ fibs3 = x / (1 - x - x ^ 2)
 --------------------------- Exercise 7
 
 data Matrix = Matrix
-  { x11 :: Integer,
-    x12 :: Integer,
-    x21 :: Integer,
-    x22 :: Integer
+  { _x11 :: Integer,
+    _x12 :: Integer,
+    _x21 :: Integer,
+    _x22 :: Integer
   }
 
 instance Num Matrix where
@@ -108,5 +106,5 @@ instance Num Matrix where
 
 fib4 :: Integer -> Integer
 fib4 0 = 0
-fib4 n | n > 0 = x12 $ Matrix 1 1 1 0 ^ n
+fib4 n | n > 0 = _x12 $ Matrix 1 1 1 0 ^ n
 fib4 n = - fib4 (- n)
