@@ -50,14 +50,23 @@ joinListToList (Append _ l r) = joinListToList l ++ joinListToList r
 (!!?) :: Int -> [a] -> Maybe a
 (!!?) n = lookup n . zip [0 ..]
 
+foldJoinList ::
+  b ->
+  (m -> a -> b) ->
+  (m -> b -> b -> b) ->
+  JoinList m a ->
+  b
+foldJoinList e _ _ Empty = e
+foldJoinList _ f _  (Single m a) = f m a
+foldJoinList e f g (Append m left right) =
+  g m (foldJoinList e f g left) (foldJoinList e f g right)
+
 --------------------------- Exercise 1
 
 -- Suggestion (no tests):
 -- Pulls the monoidal value out of the root of the JoinList
 tag :: Monoid m => JoinList m a -> m
-tag Empty = mempty
-tag (Single m _) = m
-tag (Append m _ _) = m
+tag = foldJoinList mempty const (const . const)
 
 (+++) :: Monoid m => JoinList m a -> JoinList m a -> JoinList m a
 jl1 +++ jl2 = Append (tag jl1 <> tag jl2) jl1 jl2
@@ -119,9 +128,7 @@ scoreLine str = Single (scoreString str) str
 
 instance Buffer (JoinList (Score, Size) String) where
   toString :: JoinList (Score, Size) String -> String
-  toString Empty = ""
-  toString (Single _ s) = s
-  toString (Append _ left right) = toString left ++ "\n" ++ toString right
+  toString = foldJoinList "" (\ _ x -> x) (\_ a b -> a ++ "\n" ++ b)
 
   fromString :: String -> JoinList (Score, Size) String
   fromString = fromLines . lines
