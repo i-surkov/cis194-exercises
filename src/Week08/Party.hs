@@ -15,6 +15,7 @@ import Week08.Employee
 
 --------------------------- Exercise 1
 
+-- | Add employee to guest list 
 glCons :: Employee -> GuestList -> GuestList
 glCons emp (GL emps fun) = GL (emp : emps) (fun + empFun emp)
 
@@ -22,6 +23,7 @@ glCons emp (GL emps fun) = GL (emp : emps) (fun + empFun emp)
 -- the monoid instance for GuestList.
 -- Avoids orphans.
 
+-- | Compare by fun, employing the fact that `GuestList` is a part of `Ord`
 moreFun :: GuestList -> GuestList -> GuestList
 moreFun = max
 
@@ -31,22 +33,27 @@ moreFun = max
 
 --------------------------- Exercise 3
 
+-- | Going one level up in hierarchy - one the left, guest list that
+-- includes the boss of that subtree, on the right, the one that doesn't
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
 nextLevel boss results =
   (glCons boss . mconcat . map snd $ results, mconcat . map fst $ results)
 
 --------------------------- Exercise 4
 
+-- | Generates the most optimal guest list from the given tree,
+-- maximised by fun being had
 maxFun :: Tree Employee -> GuestList
 maxFun tree =
   let (first, second) = foldTree nextLevel tree
-   in max first second
+   in moreFun first second
 
 --------------------------- Exercise 5
 
+-- | Parse a tree from file, calculate optimal guest list and
+-- print fun value as well as first 10 guests from the list
 main :: IO ()
 main = do
-  content <- readFile "./resources/Week08/company.txt"
-  let gl = maxFun . read $ content
+  gl <- maxFun . read <$> readFile "./resources/Week08/company.txt"
   putStrLn ("Total fun: " ++ (show . glFun $ gl))
   mapM_ (putStrLn . empName) (take 10 . glGuests $ gl)
