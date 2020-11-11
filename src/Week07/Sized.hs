@@ -1,9 +1,10 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving, FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Week07.Sized where
 
-newtype Size =
-  Size Int
+newtype Size
+  = Size Int
   deriving (Eq, Ord, Show, Num)
 
 getSize :: Size -> Int

@@ -6,3 +6,4 @@
 :set prompt " > "
 
 :set -package hspec
+:set -package mtl
