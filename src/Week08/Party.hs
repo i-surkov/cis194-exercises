@@ -15,9 +15,9 @@ import Week08.Employee
 
 --------------------------- Exercise 1
 
--- | Add employee to guest list 
+-- | Add employee to guest list
 glCons :: Employee -> GuestList -> GuestList
-glCons emp (GL emps fun) = GL (emp : emps) (fun + empFun emp)
+glCons emp gl = GL [emp] (empFun emp) <> gl
 
 -- See src/Week08/Employee.hs to implement
 -- the monoid instance for GuestList.
@@ -44,9 +44,7 @@ nextLevel boss results =
 -- | Generates the most optimal guest list from the given tree,
 -- maximised by fun being had
 maxFun :: Tree Employee -> GuestList
-maxFun tree =
-  let (first, second) = foldTree nextLevel tree
-   in moreFun first second
+maxFun = uncurry moreFun . foldTree nextLevel
 
 --------------------------- Exercise 5
 
