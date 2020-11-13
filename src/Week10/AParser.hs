@@ -48,20 +48,20 @@ posInt = Parser f
 
 instance Functor Parser where
   fmap :: (a -> b) -> Parser a -> Parser b
-  fmap f pa = Parser $ fmap (first f) . runParser pa
+  fmap f (Parser p) = Parser $ fmap (first f) . p
 
 ---------------------------  Exercise 2
 
 instance Applicative Parser where
   -- | Parser that always return provided value and empty string
   pure :: a -> Parser a
-  pure x = Parser $ \_ -> Just (x, [])
+  pure x = Parser $ \s -> Just (x, s)
 
   -- | Parser, that runs the first parser, which returns a function, and then
   -- runs the second parser on the input, that was left by the first one,
   -- and applies first parser function to the second parser result value
   (<*>) :: Parser (a -> b) -> Parser a -> Parser b
-  pab <*> pa = Parser $ runParser pab >=> \(f, s) -> runParser (f <$> pa) s
+  (Parser p1) <*> p2 = Parser $ p1 >=> \(f, s) -> runParser (f <$> p2) s
 
 ---------------------------  Exercise 3
 
@@ -82,7 +82,7 @@ instance Alternative Parser where
   empty = Parser $ const Nothing
 
   (<|>) :: Parser a -> Parser a -> Parser a
-  p1 <|> p2 = Parser $ \s -> runParser p1 s <|> runParser p2 s
+  (Parser p1) <|> (Parser p2) = Parser $ \s -> p1 s <|> p2 s
 
 ---------------------------  Exercise 5
 
