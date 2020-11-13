@@ -53,7 +53,7 @@ instance Functor Parser where
 ---------------------------  Exercise 2
 
 instance Applicative Parser where
-  -- | Parser that always return provided value and empty string
+  -- | Parser that always return provided value and original string
   pure :: a -> Parser a
   pure x = Parser $ \s -> Just (x, s)
 

@@ -1,33 +1,35 @@
 module Week11.SExpr where
 
-import           Control.Applicative
-import           Data.Char                      ( isSpace
-                                                , isAlpha
-                                                , isAlphaNum
-                                                )
-import           Week11.AParser                 ( Parser
-                                                , satisfy
-                                                , char
-                                                , posInt
-                                                )
+import Control.Applicative
+import Data.Char
+  ( isAlpha,
+    isAlphaNum,
+    isSpace,
+  )
+import Week11.AParser
+  ( Parser,
+    char,
+    posInt,
+    satisfy,
+  )
 
 ------------------------------------------------------------
 --  Exercise 1: Parsing repetitions
 ------------------------------------------------------------
 zeroOrMore :: Parser a -> Parser [a]
-zeroOrMore = error "Week11.SExpr#zeroOrMore not implemented"
+zeroOrMore = (<|> pure []) . oneOrMore
 
 oneOrMore :: Parser a -> Parser [a]
-oneOrMore = error "Week11.SExpr#oneOrMore not implemented"
+oneOrMore p = (:) <$> p <*> zeroOrMore p
 
 ------------------------------------------------------------
 --  Exercise 2: Utilities
 ------------------------------------------------------------
 spaces :: Parser String
-spaces = error "Week11.SExpr#spaces not implemented"
+spaces = zeroOrMore . satisfy $ isSpace
 
 ident :: Parser String
-ident = error "Week11.SExpr#ident not implemented"
+ident = (:) <$> satisfy isAlpha <*> zeroOrMore (satisfy isAlphaNum)
 
 ------------------------------------------------------------
 --  Exercise 3: Parsing S-expressions
@@ -49,5 +51,14 @@ data SExpr
   | Comb [SExpr]
   deriving (Show, Eq)
 
+parseAtom :: Parser Atom
+parseAtom = (N <$> posInt) <|> (I <$> ident)
+
+parseSExprList :: Parser [SExpr]
+parseSExprList = char '(' *> oneOrMore parseSExpr <* char ')'
+
+trimSpaces :: Parser a -> Parser a
+trimSpaces p = spaces *> p <* spaces
+
 parseSExpr :: Parser SExpr
-parseSExpr = error "Week11.SExpr#parseSExpr not implemented"
+parseSExpr = trimSpaces $ (A <$> parseAtom) <|> (Comb <$> parseSExprList)
