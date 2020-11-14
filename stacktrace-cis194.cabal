@@ -63,6 +63,7 @@ test-suite spec
     Week08.PartySpec
     Week10.AParserSpec
     Week11.SExprSpec
+    Week12.RiskSpec
   hs-source-dirs:
     test
   default-extensions:
@@ -76,6 +77,8 @@ test-suite spec
     hedgehog,
     hspec,
     hw-hspec-hedgehog,
+    MonadRandom,
+    random,
     stacktrace-cis194
   default-language:
     Haskell2010

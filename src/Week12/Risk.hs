@@ -2,17 +2,18 @@
 
 module Week12.Risk where
 
-import           Control.Monad.Random
-import           Control.Arrow                  ( (&&&) )
-import           Data.List                      ( reverse
-                                                , sort
-                                                )
+import Control.Monad.Random
+import Data.Functor ((<&>))
+import Data.List
+  ( sort,
+  )
 
 ------------------------------------------------------------
 -- Die values
 newtype DieValue = DV
   { unDV :: Int
-  } deriving (Eq, Ord, Show, Num)
+  }
+  deriving (Eq, Ord, Show, Num)
 
 first :: (a -> b) -> (a, c) -> (b, c)
 first f (a, c) = (f a, c)
@@ -29,9 +30,10 @@ die = getRandom
 type Army = Int
 
 data Battlefield = Battlefield
-  { attackers :: Army
-  , defenders :: Army
-  } deriving (Show, Eq)
+  { attackers :: Army,
+    defenders :: Army
+  }
+  deriving (Show, Eq)
 
 ------------------------------------------------------------
 -- Exercise 1
@@ -42,19 +44,28 @@ data Battlefield = Battlefield
 -- Exercise 2
 
 battle :: Battlefield -> Rand StdGen Battlefield
-battle = error "Week12.Risk#battle not implemented"
+battle (Battlefield att def) = do
+  let f x = reverse . sort <$> replicateM x die
+  attD <- f $ min 3 . max 0 $ att - 1
+  defD <- f $ min 2 def
+  let (attW, defW) = span id . sort $ zipWith (>) attD defD
+  return $ Battlefield (att - length defW) (def - length attW)
 
 ------------------------------------------------------------
 -- Exercise 3
 
 invade :: Battlefield -> Rand StdGen Battlefield
-invade = error "Week12.Risk#invade not implemented"
+invade b@(Battlefield att def)
+  | att < 2 || def == 0 = return b
+  | otherwise = battle b >>= invade
 
 ------------------------------------------------------------
 -- Exercise 4
 
 successProb :: Battlefield -> Rand StdGen Double
-successProb = error "Week12.Risk#successProb not implemented"
+successProb b =
+  replicateM 1000 (invade b)
+    <&> ((/ 1000) . fromIntegral . length . filter ((== 0) . defenders))
 
 ------------------------------------------------------------
 -- Exercise 5
@@ -62,4 +73,7 @@ successProb = error "Week12.Risk#successProb not implemented"
 -- Anyone know probability theory :p
 
 exactSuccessProb :: Battlefield -> Double
-exactSuccessProb = error "Week12.Risk#exactSuccessProb not implemented"
+exactSuccessProb (Battlefield att def)
+  | att < 2 = 0
+  | def == 0 = 1
+  | otherwise = 0.5 -- to do later

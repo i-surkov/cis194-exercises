@@ -9,3 +9,5 @@
 :set -package mtl
 :set -package hw-hspec-hedgehog
 :set -package hedgehog
+:set -package MonadRandom
+:set -package random

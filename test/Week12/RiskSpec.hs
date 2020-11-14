@@ -152,7 +152,7 @@ knownOutcomesSpec =
         `shouldBe` Battlefield 8 0
 
 compareTwo :: Double -> Double -> Double -> Bool
-compareTwo a b t = (abs (a - b)) <= t
+compareTwo a b t = abs (a - b) <= t
 
 allWithinTolerance :: Double -> [Double] -> Bool
 allWithinTolerance _ []           = True
