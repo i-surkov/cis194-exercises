@@ -10,16 +10,14 @@ import           Control.Monad.Random           ( evalRandIO
                                                 )
 import           Control.Monad.IO.Class         ( liftIO )
 import           HaskellWorks.Hspec.Hedgehog    ( require )
-import           Hedgehog                       ( MonadGen(..)
-                                                , (===)
+import           Hedgehog                       ( (===)
                                                 , assert
                                                 , forAll
                                                 , property
                                                 )
 import qualified Hedgehog.Gen                  as Gen
 import qualified Hedgehog.Range                as Range
-import           System.Random                  ( StdGen
-                                                , mkStdGen
+import           System.Random                  ( mkStdGen
                                                 )
 import           Test.Hspec                     ( Spec
                                                 , context
