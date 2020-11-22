@@ -1,6 +1,6 @@
 ### Special note
 
-This repository is based on [the original one](https://github.com/stacktracehq/cis194-exercises) that contains test suit for the CIS 194 course execrises, but populated with my solutions.
+This repository is based on [the original one](https://github.com/stacktracehq/cis194-exercises) that contains test suite for the CIS 194 course execrises, but populated with my solutions.
 
 ### The following is the original description from the [stacktracehq](https://github.com/stacktracehq) repo
 
